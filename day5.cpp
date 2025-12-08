@@ -1,3 +1,4 @@
+#include "utils.hpp"
 #include <bits/stdc++.h>
 
 struct Range
@@ -7,10 +8,8 @@ struct Range
 
     static Range fromString(const std::string &s)
     {
-        auto pos = s.find('-');
-        if (pos == std::string::npos)
-            throw std::invalid_argument("Invalid data");
-        return {std::stoull(s.substr(0, pos)), std::stoull(s.substr(pos + 1))};
+        const auto parts = utils::stringSplit(s, '-');
+        return {std::stoull(parts.at(0)), std::stoull(parts.at(1))};
     }
 
     bool isInRange(uint64_t n) const { return n >= start && n <= end; }
@@ -47,7 +46,7 @@ void part1(const std::string &filename)
         }
     }
 
-    std::cout << std::format("Part 1: {}\n", result);
+    std::println("Part 1 : {}", result);
 }
 
 void part2(const std::string &filename)
@@ -63,15 +62,14 @@ void part2(const std::string &filename)
 
         auto r1 = Range::fromString(line);
         for (auto it = ranges.begin(); it != ranges.end();) {
-            const auto r2 = *it;
-            if (r1.isOverlap(r2)) {
+            if (const auto r2 = *it; r1.isOverlap(r2)) {
                 r1.start = std::min(r2.start, r1.start);
                 r1.end   = std::max(r2.end, r1.end);
                 ranges.erase(it);
                 it = ranges.begin(); // continue at begin
                 continue;
             }
-            it++;
+            ++it;
         }
         ranges.emplace_back(r1);
     }
@@ -80,17 +78,17 @@ void part2(const std::string &filename)
     for (auto &r : ranges)
         result += r.elements();
 
-    std::cout << std::format("Part 2: {}\n", result);
+    std::println("Part 2 : {}", result);
 }
 
 int main(int argc, char **argv)
 {
     if (argc != 2) {
-        std::cerr << "Usage: " << argv[0] << " <input_file>" << std::endl; // NOLINT
+        std::println(stderr, "Usage: {} <input_file>", argv[0]); // NOLINT(*-pro-bounds-pointer-arithmetic)
         return 1;
     }
 
-    const std::string filename = argv[1]; // NOLINT
+    const std::string filename = argv[1]; // NOLINT(*-pro-bounds-pointer-arithmetic)
 
     part1(filename);
     part2(filename);

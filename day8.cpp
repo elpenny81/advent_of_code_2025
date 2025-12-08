@@ -47,17 +47,9 @@ struct Coordinate
     uint64_t y{0};
     uint64_t z{0};
 
-    std::vector<Coordinate *> connections;
-
-    Coordinate(uint64_t x, uint64_t y, uint64_t z)
-        : x{x}
-        , y{y}
-        , z{z}
-    {}
-
     static Coordinate fromString(const std::string &in)
     {
-        auto tmp = utils::stringSplit(in, ',');
+        const auto tmp = utils::stringSplit(in, ',');
         assert(tmp.size() == 3);
         return {std::stoull(tmp.at(0)), std::stoull(tmp.at(1)), std::stoull(tmp.at(2))};
     }
@@ -101,7 +93,7 @@ void part1(const std::string &filename)
         }
     }
 
-    std::sort(edges.begin(), edges.end(), [](const auto &a, const auto &b) { return a.dist2 < b.dist2; });
+    std::ranges::sort(edges, [](const auto &a, const auto &b) { return a.dist2 < b.dist2; });
 
     DSU dsu(n);
 
@@ -119,7 +111,7 @@ void part1(const std::string &filename)
         sizes[root]++;
     }
 
-    std::sort(sizes.begin(), sizes.end(), greater());
+    std::ranges::sort(sizes, greater());
     for (int i = 0; i < 3; i++)
         result *= sizes[i];
 
@@ -148,7 +140,7 @@ void part2(const std::string &filename)
         }
     }
 
-    std::sort(edges.begin(), edges.end(), [](const auto &a, const auto &b) { return a.dist2 < b.dist2; });
+    std::ranges::sort(edges, [](const auto &a, const auto &b) { return a.dist2 < b.dist2; });
 
     DSU dsu(n);
 
@@ -168,11 +160,11 @@ void part2(const std::string &filename)
 int main(int argc, char **argv)
 {
     if (argc != 2) {
-        std::cerr << "Usage: " << argv[0] << " <input_file>" << std::endl; // NOLINT
+        std::println(stderr, "Usage: {} <input_file>", argv[0]); // NOLINT(*-pro-bounds-pointer-arithmetic)
         return 1;
     }
 
-    const std::string filename = argv[1]; // NOLINT
+    const std::string filename = argv[1]; // NOLINT(*-pro-bounds-pointer-arithmetic)
 
     part1(filename);
     part2(filename);

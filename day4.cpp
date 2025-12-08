@@ -34,8 +34,8 @@ void part1(const std::string &filename)
             if (data[i][j] != '@')
                 continue;
             int cnt = 0;
-            for (auto &dir : Directions) {
-                std::pair<int, int> idx{i + dir.first, j + dir.second};
+            for (const auto &dir : Directions) {
+                const std::pair<int, int> idx{i + dir.first, j + dir.second};
                 if (idx.first < 0 || idx.second < 0 || idx.first >= data.size() || idx.second >= data[i].size())
                     continue;
                 if (data[idx.first][idx.second] == '@')
@@ -47,7 +47,7 @@ void part1(const std::string &filename)
         }
     }
 
-    std::cout << "Part 1: " << result << std::endl;
+    std::println("Part 1 : {}", result);
 }
 
 void part2(const std::string &filename)
@@ -63,8 +63,8 @@ void part2(const std::string &filename)
                 if (data[i][j] != '@')
                     continue;
                 int cnt = 0;
-                for (auto &dir : Directions) {
-                    std::pair<int, int> idx{i + dir.first, j + dir.second};
+                for (const auto &dir : Directions) {
+                    const std::pair<int, int> idx{i + dir.first, j + dir.second};
                     if (idx.first < 0 || idx.second < 0 || idx.first >= data.size() || idx.second >= data[i].size())
                         continue;
                     if (data[idx.first][idx.second] == '@')
@@ -82,17 +82,17 @@ void part2(const std::string &filename)
         result += tmpResult;
     }
 
-    std::cout << "Part 2: " << result << std::endl;
+    std::println("Part 2 : {}", result);
 }
 
 int main(int argc, char **argv)
 {
     if (argc != 2) {
-        std::cerr << "Usage: " << argv[0] << " <input_file>" << std::endl; // NOLINT
+        std::println(stderr, "Usage: {} <input_file>", argv[0]); // NOLINT(*-pro-bounds-pointer-arithmetic)
         return 1;
     }
 
-    const std::string filename = argv[1]; // NOLINT
+    const std::string filename = argv[1]; // NOLINT(*-pro-bounds-pointer-arithmetic)
 
     part1(filename);
     part2(filename);

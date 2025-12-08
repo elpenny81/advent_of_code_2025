@@ -22,7 +22,7 @@ void part1(const std::string &filename)
         result += (max1 - '0') * 10 + (max2 - '0');
     }
 
-    std::cout << std::format("Part 1: {}\n", result);
+    std::println("Part 1 : {}", result);
 }
 
 void part2(const std::string &filename)
@@ -48,16 +48,20 @@ void part2(const std::string &filename)
         result += std::stoull(digits);
     }
 
-    std::cout << std::format("Part 2: {}\n", result);
+    std::println("Part 2 : {}", result);
 }
 
-int main(int argc, char *argv[])
+int main(int argc, char **argv)
 {
-    if (argc < 2) {
-        std::cerr << "Usage: " << argv[0] << " <input_file>\n"; // NOLINT
+    if (argc != 2) {
+        std::println(stderr, "Usage: {} <input_file>", argv[0]); // NOLINT(*-pro-bounds-pointer-arithmetic)
         return 1;
     }
-    part1(argv[1]); // NOLINT
-    part2(argv[1]); // NOLINT
+
+    const std::string filename = argv[1]; // NOLINT(*-pro-bounds-pointer-arithmetic)
+
+    part1(filename);
+    part2(filename);
+
     return 0;
 }

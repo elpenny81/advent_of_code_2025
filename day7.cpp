@@ -13,8 +13,8 @@ struct std::hash<Position>
 {
     std::size_t operator()(const Position &p) const noexcept
     {
-        auto h1 = std::hash<std::size_t>{}(p.x);
-        auto h2 = std::hash<std::size_t>{}(p.y);
+        const auto h1 = std::hash<std::size_t>{}(p.x);
+        const auto h2 = std::hash<std::size_t>{}(p.y);
         return h1 ^ (h2 + 0x9e3779b97f4a7c15ULL + (h1 << 6) + (h1 >> 2));
     }
 };
@@ -49,7 +49,7 @@ uint64_t stepPart2(const Position &start, const Map &map, Cache &cache)
     for (std::size_t y = start.y; y < map.size(); y++) {
         // split at '^'
         if (map.at(y).at(start.x) == '^') {
-            Position cur{start.x, y};
+            const Position cur{start.x, y};
             if (cache.contains(cur)) {
                 return cache.at(cur);
             }
@@ -77,16 +77,15 @@ void part1(const std::string &filename)
     Position      start;
 
     while (std::getline(file, line)) {
-        auto startPos = line.find('S');
-        if (startPos != std::string::npos) {
+        if (auto startPos = line.find('S'); startPos != std::string::npos) {
             start.x = startPos;
             start.y = lines.size();
         }
         lines.emplace_back(line);
     }
 
-    uint64_t result = step(start, lines);
-    std::cout << std::format("Part 1 : {}\n", result);
+    const uint64_t result = step(start, lines);
+    std::println("Part 1 : {}", result);
 }
 
 void part2(const std::string &filename)
@@ -98,26 +97,25 @@ void part2(const std::string &filename)
     Cache         cache;
 
     while (std::getline(file, line)) {
-        auto startPos = line.find('S');
-        if (startPos != std::string::npos) {
+        if (auto startPos = line.find('S'); startPos != std::string::npos) {
             start.x = startPos;
             start.y = lines.size();
         }
         lines.emplace_back(line);
     }
 
-    uint64_t result = stepPart2(start, lines, cache);
-    std::cout << std::format("Part 2 : {}\n", result);
+    const uint64_t result = stepPart2(start, lines, cache);
+    std::println("Part 2 : {}", result);
 }
 
 int main(int argc, char **argv)
 {
     if (argc != 2) {
-        std::cerr << "Usage: " << argv[0] << " <input_file>" << std::endl; // NOLINT
+        std::println(stderr, "Usage: {} <input_file>", argv[0]); // NOLINT(*-pro-bounds-pointer-arithmetic)
         return 1;
     }
 
-    const std::string filename = argv[1]; // NOLINT
+    const std::string filename = argv[1]; // NOLINT(*-pro-bounds-pointer-arithmetic)
 
     part1(filename);
     part2(filename);

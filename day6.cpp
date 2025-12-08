@@ -33,7 +33,7 @@ void part1(const std::string &filename)
         result += rowResult;
     }
 
-    std::cout << std::format("Part 1 : {}\n", result);
+    std::println("Part 1 : {}", result);
 }
 
 void part2(const std::string &filename)
@@ -56,8 +56,8 @@ void part2(const std::string &filename)
         uint64_t tmpResult    = op == '+' ? 0 : 1;
         for (size_t i = startPos; i <= endPos; i++) {
             std::string tmp;
-            for (auto &line : lines) {
-                char c = line.at(i);
+            for (auto &l : lines) {
+                char c = l.at(i);
                 if (c == ' ')
                     continue;
                 tmp.push_back(c);
@@ -72,17 +72,17 @@ void part2(const std::string &filename)
         result += tmpResult;
     }
 
-    std::cout << std::format("Part 2 : {}\n", result);
+    std::println("Part 2 : {}", result);
 }
 
 int main(int argc, char **argv)
 {
     if (argc != 2) {
-        std::cerr << "Usage: " << argv[0] << " <input_file>" << std::endl; // NOLINT
+        std::println(stderr, "Usage: {} <input_file>", argv[0]); // NOLINT(*-pro-bounds-pointer-arithmetic)
         return 1;
     }
 
-    const std::string filename = argv[1]; // NOLINT
+    const std::string filename = argv[1]; // NOLINT(*-pro-bounds-pointer-arithmetic)
 
     part1(filename);
     part2(filename);

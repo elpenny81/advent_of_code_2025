@@ -1,10 +1,5 @@
-#include <cstdint>
-#include <format>
-#include <fstream>
-#include <iostream>
-#include <string>
-#include <string_view>
-#include <vector>
+#include "utils.hpp"
+#include <bits/stdc++.h>
 
 struct Range
 {
@@ -14,13 +9,10 @@ struct Range
 
 Range parseRange(const std::string &s)
 {
-    auto dashPos = s.find('-');
-    if (dashPos == std::string::npos) {
-        throw std::invalid_argument("Invalid range format");
-    }
-    Range range;
-    range.start = std::stoull(s.substr(0, dashPos));
-    range.end   = std::stoull(s.substr(dashPos + 1));
+    const auto parts = utils::stringSplit(s, '-');
+    Range      range;
+    range.start = std::stoull(parts.at(0));
+    range.end   = std::stoull(parts.at(1));
     return range;
 }
 
@@ -65,11 +57,11 @@ void part1(const std::string &filename)
             return false;
         }
 
-        unsigned half = digits / 2;
-        uint64_t base = POW10[half]; // 10^half
+        const unsigned half = digits / 2;
+        const uint64_t base = POW10[half]; // 10^half
 
-        uint64_t hi = n / base;
-        uint64_t lo = n % base;
+        const uint64_t hi = n / base;
+        const uint64_t lo = n % base;
 
         return hi == lo;
     };
@@ -79,14 +71,14 @@ void part1(const std::string &filename)
     uint64_t      result = 0;
     while (std::getline(file, line, ',')) {
         // process line
-        auto range = parseRange(line);
-        for (auto n = range.start; n <= range.end; ++n) {
+        auto [start, end] = parseRange(line);
+        for (auto n = start; n <= end; ++n) {
             if (haveTwiceSeq(n)) {
                 result += n;
             }
         }
     };
-    std::cout << std::format("Part 1: {}\n", result);
+    std::println("Part 1 : {}", result);
 }
 
 void part2(const std::string &filename)
@@ -109,12 +101,12 @@ void part2(const std::string &filename)
             }
         }
 
-        std::size_t longestPrefixSuffix = lps[n - 1];
+        const std::size_t longestPrefixSuffix = lps[n - 1];
         if (longestPrefixSuffix == 0) {
             return false; // no proper prefix = suffix → no repetition
         }
 
-        std::size_t patternLen = n - longestPrefixSuffix;
+        const std::size_t patternLen = n - longestPrefixSuffix;
         return (n % patternLen == 0);
     };
 
@@ -123,24 +115,28 @@ void part2(const std::string &filename)
     uint64_t      result = 0;
     while (std::getline(file, line, ',')) {
         // process line
-        auto range = parseRange(line);
-        for (auto n = range.start; n <= range.end; ++n) {
+        auto [start, end] = parseRange(line);
+        for (auto n = start; n <= end; ++n) {
             auto s = std::to_string(n);
             if (haveAnyRepetitionSeq(s)) {
                 result += n;
             }
         }
     };
-    std::cout << std::format("Part 2: {}\n", result);
+    std::println("Part 2 : {}", result);
 }
 
-int main(int argc, char *argv[])
+int main(int argc, char **argv)
 {
-    if (argc < 2) {
-        std::cerr << "Usage: " << argv[0] << " <input_file>\n"; // NOLINT
+    if (argc != 2) {
+        std::println(stderr, "Usage: {} <input_file>", argv[0]); // NOLINT(*-pro-bounds-pointer-arithmetic)
         return 1;
     }
-    part1(argv[1]); // NOLINT
-    part2(argv[1]); // NOLINT
+
+    const std::string filename = argv[1]; // NOLINT(*-pro-bounds-pointer-arithmetic)
+
+    part1(filename);
+    part2(filename);
+
     return 0;
 }
