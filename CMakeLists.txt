@@ -4,6 +4,10 @@ project(aoc2025)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+include(cmake/CPM.cmake)
+
+cpmaddpackage("gh:ryanhaining/cppitertools@2.3")
+
 add_executable(day1 day1.cpp)
 add_executable(day2 day2.cpp)
 add_executable(day3 day3.cpp)
@@ -16,3 +20,5 @@ add_executable(day9 day9.cpp)
 add_executable(day10 day10.cpp)
 add_executable(day11 day11.cpp)
 add_executable(day12 day12.cpp)
+
+target_link_libraries(day10 PRIVATE cppitertools z3)
