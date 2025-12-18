@@ -5,7 +5,7 @@
 
 namespace utils {
 
-std::vector<std::string> stringSplit(std::string_view sv, char delimiter = ' ', bool keepEmpty = false)
+inline std::vector<std::string> stringSplit(std::string_view sv, char delimiter = ' ')
 {
     std::vector<std::string> ret;
     std::size_t              pos      = 0;
